@@ -20,6 +20,11 @@ public class Item implements Serializable {
     }
 
     /**
+     * Default Constructor
+     */
+    public Item() {}
+
+    /**
      * @param id the id to set
      */
     public void setId(int id) {
