@@ -15,6 +15,7 @@ import java.rmi.server.UnicastRemoteObject;
     private static Registry registry;
     private static final String name = "main_server";
     private static InetAddress address;
+    private static Log log;
 
     /**
      * 
@@ -32,6 +33,7 @@ import java.rmi.server.UnicastRemoteObject;
             address = InetAddress.getLocalHost();
             registry = LocateRegistry.createRegistry(port);
             registry.bind(name, remoteMainServer);
+            log = new Log("MainServer.log");
             System.out.println("Main Server running on: " + address.getHostAddress() + ":" + port);
             System.out.println("Main Server is ready!");
         } catch (Exception e) {
@@ -41,8 +43,8 @@ import java.rmi.server.UnicastRemoteObject;
     
     @Override
     public void saveItem(Item item) throws RemoteException {
-        System.out.println(item.getId());
-        System.out.println(item.getDescription());
+        log.save(item.getId() + ";" + item.getDescription());
+        System.out.println("Item Saved!");
     }
 
     @Override
