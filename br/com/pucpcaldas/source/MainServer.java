@@ -7,8 +7,10 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 /**
- * @author Elton Fonseca
+ * @author Elton Fonseca, Felipe Hercules, Gabriel Castelo, Gean Matos
  */
 
  public class MainServer extends UnicastRemoteObject implements InterfaceServer {
@@ -39,7 +41,6 @@ import java.rmi.server.UnicastRemoteObject;
             registry = LocateRegistry.createRegistry(port);
             registry.bind(name, remoteMainServer);
             log = new Log("MainServer.log");
-            loadServers();
             System.out.println("Main Server running on: " + address.getHostAddress() + ":" + port);
             System.out.println("Main Server is ready!");
         } catch (Exception e) {
@@ -84,6 +85,7 @@ import java.rmi.server.UnicastRemoteObject;
 
     @Override
     public void saveItem(Item item) throws RemoteException {
+        loadServers();
         log.save(item.getId() + ";" + item.getDescription());
         if(serverIsUp(remoteServerBackupOne)) {
             remoteServerBackupOne.saveItem(item);
@@ -102,8 +104,14 @@ import java.rmi.server.UnicastRemoteObject;
 
     @Override
     public Item searchItem(int id) throws RemoteException {
-        System.out.println("Retorna Item");
-        Item item = new Item(1, "GariGari");
-        return item;
+        Item item;
+        String description = log.search(id);
+        if(!description.equals(null)){
+            item = new Item(id, description);
+            System.out.println("Item Retrieved!");
+            return item;
+        }
+        System.out.println("Item not Found!");
+        return null;
     }
  }

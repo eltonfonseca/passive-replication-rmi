@@ -1,5 +1,5 @@
 /**
- * @author Elton Fonseca
+ * @author Elton Fonseca, Felipe Hercules, Gabriel Castelo, Gean Matos
  */
 
 import java.io.Serializable;

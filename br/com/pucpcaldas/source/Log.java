@@ -1,6 +1,6 @@
 
 /**
- * @author Elton Fonseca
+ * @author Elton Fonseca, Felipe Hercules, Gabriel Castelo, Gean Matos
  */
 
 import java.io.BufferedReader;
@@ -10,6 +10,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import com.sun.org.apache.xpath.internal.SourceTree;
 
 public class Log {
 
@@ -38,7 +40,7 @@ public class Log {
     public Log(String fileName) {
         getOS();
         if (isWindows()) {
-            this.path = "\\logs\\" + fileName;
+            this.path = "logs\\" + fileName;
         } else if (isMac()) {
             this.path = "logs/" + fileName;
         } else if (isUnix()) {
@@ -80,13 +82,13 @@ public class Log {
             while((line = buffer.readLine()) != null) {
                 String[] strings = line.split(";");
                 if(Integer.parseInt(strings[0]) == index)
-                    return line;
+                    return strings[1];
             }
 
         } catch (IOException e) {
-            System.err.println("Log error: Wron't read from file!");
+            System.err.println("Log error: Won't read from file!");
         }
-        return line;
+        return null;
     }
 
     /**

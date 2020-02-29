@@ -1,11 +1,16 @@
 import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 /**
- * @author Elton Fonseca
+ * @author Elton Fonseca, Felipe Hercules, Gabriel Castelo, Gean Matos
  */
 
  public class ServerBackupTwo extends UnicastRemoteObject implements InterfaceServer {
@@ -40,7 +45,7 @@ import java.rmi.server.UnicastRemoteObject;
             System.err.println("Error: Main Server is not ready! " + e.getMessage());
         }
     }
-    
+
     @Override
     public void saveItem(Item item) throws RemoteException {
         log.save(item.getId() + ";" + item.getDescription());
@@ -49,8 +54,14 @@ import java.rmi.server.UnicastRemoteObject;
 
     @Override
     public Item searchItem(int id) throws RemoteException {
-        System.out.println("Retorna Item");
-        Item item = new Item(1, "GariGari");
-        return item;
+        Item item;
+        String description = log.search(id);
+        if(!description.equals(null)){
+            item = new Item(id, description);
+            System.out.println("Item Retrieved!");
+            return item;
+        }
+        System.out.println("Item not Found!");
+        return null;
     }
  }

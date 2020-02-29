@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 
 /**
- * @author Elton Fonseca
+ * @author Elton Fonseca, Felipe Hercules, Gabriel Castelo, Gean Matos
  */
 
 public class Client {
@@ -49,6 +49,18 @@ public class Client {
                 }
                 break;
             case 2: // Recuperar Item
+                if (serverIsUp(remoteMainServer)) {
+                    System.out.println("####### Connected in Main Server! #######");
+                    retrieveItem(remoteMainServer);
+                } else if (serverIsUp(remoteServerBackupOne)) {
+                    System.out.println("####### Connected in Server Backup One! #######");
+                    retrieveItem(remoteServerBackupOne);
+                } else if (serverIsUp(remoteServerBackupTwo)) {
+                    System.out.println("####### Connected in Server Backup Two! #######");
+                    retrieveItem(remoteServerBackupTwo);
+                } else {
+                    System.out.println("Servers is Down!");
+                }
                 break;
             }
         }
@@ -86,6 +98,30 @@ public class Client {
             server.saveItem(item);
         } catch (Exception e) {
             System.err.println("Error: Not save Item on the server");
+        }
+    }
+
+    /**
+     * Envia o ID de um objeto ao servidor remoto e o reconstroi com a string de retorno
+     * 
+     * @param server Servidor Remoto
+     */
+    private static void retrieveItem(InterfaceServer server){
+        int id;
+        Item item;
+        System.out.print("Input the code: ");
+        id = scanner.nextInt();
+        try {    
+            item = server.searchItem(id);
+            if(!item.equals(null)){
+                System.out.println("Item Succesfully retrieved!");
+                System.out.println("Item id: "+ item.getId());
+                System.out.println("Item Description: "+ item.getDescription());
+            }else{
+                System.out.println("Item not found!");
+            }
+        } catch (Exception e) {
+            System.err.println("Error: Impossible to retrieve the item on the server");
         }
     }
 
